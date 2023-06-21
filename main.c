@@ -11,10 +11,15 @@ int main(void)
 	size_t n = 0;
 	int num_chars;
 	char **toks;
-	char *argv[] = {"/usr/bin/pwd", (char *)0};
-	char *envp[] = {"PATH=/bin", (char *)0};
+	char *file_path;
 	pid_t child;
 	int status = 0;
+	struct stat buf;
+	char *path_token;
+	const char *delim = ":";
+	size_t len_path;
+	size_t len_toks;
+	char *path;
 
 	while (1)
 	{
@@ -29,27 +34,50 @@ int main(void)
 		child = fork();
 		if (child == -1)
 		{
-			perror("./sh");
+			perror("./hsh");
 			return (-1);
 		}
 		if (child == 0)
 		{
-			if (access(argv[0], X_OK) == -1)
+			file_path = get_env("PATH");
+			if (file_path == NULL)
 			{
 				return (-1);
 			}
-			if (execve(argv[0], argv, envp) == -1)
+			path_token = strtok(file_path, delim);
+			while (path_token != NULL)
 			{
-				perror("./sh");
-				return (-1);
+				len_path = _strlen(path_token);
+				len_toks = _strlen(toks[0]);
+				path = malloc(len_path + len_toks + 2);
+				if (path == NULL)
+				{
+					perror("malloc");
+					return (-1);
+				}
+				_strcpy(path, path_token);
+				_strcat(path, "/");
+				_strcat(path, toks[0]);
+				_strcat(path, "\0");
+				if (stat(path, &buf) == 0)
+				{
+					if (execve(path, toks, environ) == -1)
+					{
+						perror("execve");
+						return (-1);
+					}
+				}
+				perror("stat");
+				free(path);
+				path_token = strtok(NULL, delim);
 			}
+			exit(0);
 		}
 		else
 		{
 			wait(&status);
 		}
 		free_toks(toks);
-		/*exit(status);*/
 	}
 	free(input);
 	return (0);
