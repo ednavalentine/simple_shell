@@ -8,7 +8,7 @@ int main(void)
 {
 	char *input_prompt = "$ ";
 	char *input = NULL;
-	size_t n = 0;
+	size_t n = 128;
 	int num_chars;
 	char **toks;
 	char *file_path;
@@ -30,6 +30,10 @@ int main(void)
 			free(input);
 			return (-1);
 		}
+		/*if (num_chars > 0 && input[num_chars - 1] == '\n')
+		{
+			input[num_chars - 1] = '\0';
+		}*/
 		toks = parse_data(input);
 		child = fork();
 		if (child == -1)
@@ -61,10 +65,13 @@ int main(void)
 				_strcat(path, "\0");
 				if (stat(path, &buf) == 0)
 				{
-					if (execve(path, toks, environ) == -1)
+					if (access(path, X_OK) == 0)
 					{
-						perror("execve");
-						return (-1);
+						if (execve(path, toks, environ) == -1)
+						{
+							perror("execve");
+							return (-1);
+						}
 					}
 				}
 				perror("stat");

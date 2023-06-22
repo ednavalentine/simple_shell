@@ -24,7 +24,7 @@ char **parse_data(char *str)
 		toks[count] = malloc(len + 1);
 		if (toks[count] == NULL)
 		{
-			/*add free for both array element and array*/
+			free_toks(toks);
 			return (NULL);
 		}
 		_strcpy(toks[count], str_token);
