@@ -74,6 +74,7 @@ int main(void)
 						}
 					}
 				}
+				perror("access");
 				perror("stat");
 				free(path);
 				path_token = strtok(NULL, delim);
