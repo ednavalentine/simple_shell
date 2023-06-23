@@ -26,5 +26,5 @@ char *get_env(char *name)
 		}
 		cnt++;
 	}
-	return (name);
+	return (NULL);
 }
