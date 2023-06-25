@@ -41,8 +41,14 @@ char *find_path(char *cmd)
 	char *path;
 	size_t len_path;
 	size_t len_toks;
+	struct stat buf;
+	int path_found = 0; /* flag check to see if executable is found */
 
-	file_path = get_env("PATH");
+	if (cmd == NULL)
+	{
+		return (NULL);
+	}
+	file_path = getenv("PATH");
 	if (file_path == NULL)
 	{
 		return (NULL);
@@ -60,9 +66,24 @@ char *find_path(char *cmd)
 		_strcpy(path, path_token);
 		_strcat(path, "/");
 		_strcat(path, cmd);
+		_strcat(path, "\0");
+		if ((access(path, F_OK) == 0) && (access(path, X_OK) == 0) &&
+				(stat(path, &buf) == 0) && S_ISREG(buf.st_mode))
+		{
+			path_found = 1;
+			break;
+		}
+		free(path);
 		path_token = strtok(NULL, delim);
 	}
-	return (path);
+	if (path_found)
+	{
+		return (path);	
+	}
+	else
+	{
+		return (NULL);
+	}
 }
 /**
  * exec_input - replaces child process with a new program
@@ -73,26 +94,46 @@ void exec_input(char **toks)
 {
 	pid_t child;
 	int status = 0;
-	char *file_path;
+	char *path = NULL;
 
-	file_path = find_path(toks[0]);
-	child = fork();
-	if (child == -1)
+	path = find_path(toks[0]);
+	if (path == NULL)
 	{
-		perror("./hsh");
-		exit(1);
+		perror("path");
 	}
-	if (child == 0)
+	child = fork();
+	if (child < 0)
 	{
-		if (execve(file_path, toks, environ) == -1)
+		perror("child");
+		exit(0);
+	}
+	else if (child == 0)
+	{
+		if (execve(path, toks, environ) == -1)
 		{
 			perror("execve");
-			exit(1);
+			exit(0);
 		}
 	}
 	else
 	{
-		wait(&status); /*waitpid(child, &status, 0);*/
+		if (wait(&status) == -1)
+		{
+			perror("wait");
+			exit(1);
+		}
+		if (WIFEXITED(status))
+		{
+			WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			WTERMSIG(status);
+		}
+		else
+		{
+			perror("fork");
+		}
 	}
-	free(file_path);
+	free(path);
 }
