@@ -8,9 +8,12 @@ int _strlen(char *s)
 {
 	int i = 0;
 
-	while (*(s + i))
+	if (s != NULL) /* added this and it removed the invalid write */
 	{
-		i++;
+		while (*(s + i))
+		{
+			i++;
+		}
 	}
 	return (i);
 }

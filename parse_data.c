@@ -6,13 +6,13 @@
  */
 char **parse_data(char *str)
 {
-	const char *delim = " ";
+	const char *delim = " \n\t\r"; /*added this*/
 	char *str_token = NULL;
 	char **toks = NULL;
 	size_t count = 0;
 	size_t len = 0;
 
-	toks = malloc(sizeof(char *) * (count + 2));
+	toks = malloc(sizeof(char *) * (count + 5)); /* accounted for the extras above */
 	if (toks == NULL)
 	{
 		return (NULL);

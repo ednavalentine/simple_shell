@@ -11,7 +11,7 @@ int main(void)
 	size_t n = 0;
 	int num_chars;
 	char **toks;
-	char *path = NULL;
+	/*char *path = NULL;*/
 
 	while (1)
 	{
@@ -25,16 +25,16 @@ int main(void)
 			free(input);
 			exit(0);
 		}
-		if (input[_strlen(input) - 1] == '\n')
+		if (num_chars > 0 && input[num_chars - 1] == '\n') /*returned this since i fixed _strlen*/
 		{
-			input[_strlen(input) - 1] = '\0';
+			input[num_chars - 1] = '\0';
 		}
 		toks = parse_data(input);
 		if (toks != NULL)
 		{
 			exec_input(toks);
 		}
-		free(path);
+		/*free(path); so this does not cause issues na gcc and valgrind when its not present in the code*/
 		free_toks(toks);
 		/*n = 0;*/
 	}

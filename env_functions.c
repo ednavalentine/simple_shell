@@ -18,7 +18,7 @@ char *get_env(char *name)
 		if (_strcmp(environ[cnt], name) == 0)
 		{
 			env_val = _strchr(environ[cnt], '=');
-			if (env_val == NULL)
+			if (env_val != NULL)
 			{
 				return (NULL);
 			}
@@ -43,7 +43,9 @@ char *find_path(char *cmd)
 	size_t len_toks;
 	struct stat buf;
 
-	file_path = getenv("PATH");
+	if (cmd == NULL) /* added this na kuna malloc ya non-interactive shell valgrind imepotea */
+		return (NULL);
+	file_path = get_env("PATH");
 	if (file_path == NULL)
 	{
 		return (NULL);
