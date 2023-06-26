@@ -43,7 +43,6 @@ char *find_path(char *cmd)
 	size_t len_path;
 	size_t len_toks;
 	struct stat buf;
-	int path_found = 0; /* flag check to see if executable is found */
 
 	if (cmd == NULL)
 	{
@@ -53,6 +52,7 @@ char *find_path(char *cmd)
      * https://wiki.sei.cmu.edu/confluence/display/c/STR06-C.+Do+not+assume+that+strtok%28%29+leaves+the+parse+string+unchanged
      * */
 	file_path = (char *)malloc(strlen(env_path) + 1);
+
 	if (file_path == NULL)
 	{
 		return (NULL);
@@ -72,11 +72,9 @@ char *find_path(char *cmd)
 		_strcat(path, "/");
 		_strcat(path, cmd);
 		_strcat(path, "\0");
-		if ((access(path, F_OK) == 0) && (access(path, X_OK) == 0) &&
-				(stat(path, &buf) == 0) && S_ISREG(buf.st_mode))
+		if ((access(path, X_OK) == 0) && (stat(path, &buf) == 0))
 		{
-			path_found = 1;
-			break;
+			return (path);
 		}
 		free(path);
 		path_token = strtok(NULL, delim);
@@ -90,6 +88,7 @@ char *find_path(char *cmd)
 	{
 		return (NULL);
 	}
+
 }
 /**
  * exec_input - replaces child process with a new program
@@ -132,7 +131,7 @@ void exec_input(char **toks)
 			perror("wait");
 			exit(1);
 		}
-		/*if (WIFEXITED(status))
+		if (WIFEXITED(status))
 		{
 			WEXITSTATUS(status);
 		}
@@ -143,7 +142,7 @@ void exec_input(char **toks)
 		else
 		{
 			perror("fork");
-		}*/
+		}
 	}
 	free(path);
 }
