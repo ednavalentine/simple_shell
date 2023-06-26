@@ -7,9 +7,8 @@
 int main(void)
 {
 	char *input_prompt = "$ ";
-	/*char *prompt = "<< ";*/
 	char *input = NULL;
-	size_t n = 128;
+	size_t n = 0;
 	int num_chars;
 	char **toks;
 	char *path = NULL;
@@ -20,16 +19,15 @@ int main(void)
 		{
 			write(STDOUT_FILENO, input_prompt, _strlen(input_prompt));
 		}
-		/*else
-		{
-			write(STDOUT_FILENO, prompt, _strlen(prompt));
-			exit(0);
-		}*/
 		num_chars = getline(&input, &n, stdin);
 		if (num_chars == -1)
 		{
 			free(input);
 			exit(0);
+		}
+		if (input[_strlen(input) - 1] == '\n')
+		{
+			input[_strlen(input) - 1] = '\0';
 		}
 		toks = parse_data(input);
 		if (toks != NULL)
@@ -38,8 +36,8 @@ int main(void)
 		}
 		free(path);
 		free_toks(toks);
+		/*n = 0;*/
 	}
-	/*free(path);*/
 	free(input);
 	return (0);
 }

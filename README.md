@@ -1,2 +1,2 @@
-This project entails the implementation of a simple shell that works as a UNIX command line interpreter. 
+This project entails the implementation of a simple shell that works as a UNIX command line interpreter.
 The shell requests user input by displaying a prompt and after executing the command, the input prompt is displayed again, similar to the original UNIX shell. The custom shell uses the fork-exec-wait paradigm to create a child process, replace it with a new program i.e the exacutable binary files and ensure the parent process is suspended as the child process executes and resumes execution when it terminates.

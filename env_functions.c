@@ -42,12 +42,7 @@ char *find_path(char *cmd)
 	size_t len_path;
 	size_t len_toks;
 	struct stat buf;
-	int path_found = 0; /* flag check to see if executable is found */
 
-	if (cmd == NULL)
-	{
-		return (NULL);
-	}
 	file_path = getenv("PATH");
 	if (file_path == NULL)
 	{
@@ -67,23 +62,14 @@ char *find_path(char *cmd)
 		_strcat(path, "/");
 		_strcat(path, cmd);
 		_strcat(path, "\0");
-		if ((access(path, F_OK) == 0) && (access(path, X_OK) == 0) &&
-				(stat(path, &buf) == 0) && S_ISREG(buf.st_mode))
+		if ((access(path, X_OK) == 0) && (stat(path, &buf) == 0))
 		{
-			path_found = 1;
-			break;
+			return (path);
 		}
 		free(path);
 		path_token = strtok(NULL, delim);
 	}
-	if (path_found)
-	{
-		return (path);
-	}
-	else
-	{
-		return (NULL);
-	}
+	return (NULL);
 }
 /**
  * exec_input - replaces child process with a new program
@@ -126,7 +112,7 @@ void exec_input(char **toks)
 			perror("wait");
 			exit(1);
 		}
-		/*if (WIFEXITED(status))
+		if (WIFEXITED(status))
 		{
 			WEXITSTATUS(status);
 		}
@@ -137,7 +123,7 @@ void exec_input(char **toks)
 		else
 		{
 			perror("fork");
-		}*/
+		}
 	}
 	free(path);
 }
