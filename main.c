@@ -7,7 +7,7 @@
 int main(void)
 {
 	char *input_prompt = "$ ";
-	char *prompt = "<< ";
+	/*char *prompt = "<< ";*/
 	char *input = NULL;
 	size_t n = 128;
 	int num_chars;
@@ -20,10 +20,11 @@ int main(void)
 		{
 			write(STDOUT_FILENO, input_prompt, _strlen(input_prompt));
 		}
-		else
+		/*else
 		{
 			write(STDOUT_FILENO, prompt, _strlen(prompt));
-		}
+			exit(0);
+		}*/
 		num_chars = getline(&input, &n, stdin);
 		if (num_chars == -1)
 		{
@@ -38,7 +39,7 @@ int main(void)
 		free(path);
 		free_toks(toks);
 	}
-	free(path);
+	/*free(path);*/
 	free(input);
 	return (0);
 }

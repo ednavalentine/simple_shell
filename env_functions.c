@@ -78,7 +78,7 @@ char *find_path(char *cmd)
 	}
 	if (path_found)
 	{
-		return (path);	
+		return (path);
 	}
 	else
 	{
@@ -95,11 +95,14 @@ void exec_input(char **toks)
 	pid_t child;
 	int status = 0;
 	char *path = NULL;
+	char *error = "No such file or directory: ";
 
 	path = find_path(toks[0]);
 	if (path == NULL)
 	{
-		perror("path");
+		write(STDERR_FILENO, error, _strlen(error));
+		write(STDERR_FILENO, toks[0], _strlen(toks[0]));
+		write(STDERR_FILENO, "\n", 1);
 	}
 	child = fork();
 	if (child < 0)
@@ -111,6 +114,7 @@ void exec_input(char **toks)
 	{
 		if (execve(path, toks, environ) == -1)
 		{
+			free(path);
 			perror("execve");
 			exit(0);
 		}
@@ -122,7 +126,7 @@ void exec_input(char **toks)
 			perror("wait");
 			exit(1);
 		}
-		if (WIFEXITED(status))
+		/*if (WIFEXITED(status))
 		{
 			WEXITSTATUS(status);
 		}
@@ -133,7 +137,7 @@ void exec_input(char **toks)
 		else
 		{
 			perror("fork");
-		}
+		}*/
 	}
 	free(path);
 }
