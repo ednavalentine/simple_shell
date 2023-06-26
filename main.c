@@ -31,7 +31,8 @@ int main(void)
 			free(input);
 			exit(0);
 		}
-		toks = parse_data(input);
+		toks = parse_data(trim(input)); // User could add unnecessary spaces at the beginning or end
+
 		if (toks != NULL)
 		{
 			exec_input(toks);

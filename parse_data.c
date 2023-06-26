@@ -12,30 +12,27 @@ char **parse_data(char *str)
 	size_t count = 0;
 	size_t len = 0;
 
-	toks = malloc(sizeof(char *) * (count + 2));
-	if (toks == NULL)
-	{
-		return (NULL);
-	}
-	str_token = strtok(str, delim);
-	len = _strlen(str_token);
+    /* Added custom function to avoid splitting strings between quotes */
+	str_token = strmbtok(str, delim);
+
 	while (str_token != NULL)
 	{
+        len = _strlen(str_token);
+        toks = (char **) realloc(toks, len * sizeof **toks); // Looks a bit neat
 		toks[count] = malloc(len + 1);
+
 		if (toks[count] == NULL)
 		{
 			free_toks(toks);
 			return (NULL);
 		}
+
 		_strcpy(toks[count], str_token);
-		str_token = strtok(NULL, delim);
-		if (str_token != NULL)
-		{
-			len = _strlen(str_token);
-		}
+		str_token = strmbtok(NULL, delim);
+
 		count++;
 	}
-	toks[count] = NULL;
+
 	return (toks);
 }
 /**

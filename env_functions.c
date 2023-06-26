@@ -38,6 +38,7 @@ char *find_path(char *cmd)
 	char *file_path;
 	char *path_token;
 	const char *delim = ":";
+    const char *env_path = getenv("PATH");
 	char *path;
 	size_t len_path;
 	size_t len_toks;
@@ -48,11 +49,15 @@ char *find_path(char *cmd)
 	{
 		return (NULL);
 	}
-	file_path = getenv("PATH");
+    /* The file_path changes for subsequent executions
+     * https://wiki.sei.cmu.edu/confluence/display/c/STR06-C.+Do+not+assume+that+strtok%28%29+leaves+the+parse+string+unchanged
+     * */
+	file_path = (char *)malloc(strlen(env_path) + 1);
 	if (file_path == NULL)
 	{
 		return (NULL);
 	}
+    strcpy(file_path, env_path);
 	path_token = strtok(file_path, delim);
 	while (path_token != NULL)
 	{
@@ -76,6 +81,7 @@ char *find_path(char *cmd)
 		free(path);
 		path_token = strtok(NULL, delim);
 	}
+    free(file_path);
 	if (path_found)
 	{
 		return (path);
