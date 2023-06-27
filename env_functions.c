@@ -36,6 +36,7 @@ char *get_env(char *name)
 char *find_path(char *cmd)
 {
 	char *file_path = NULL;
+	char *filepath_cpy = NULL;
 	char *path_token = NULL;
 	const char *delim = ":";
 	char *path = NULL;
@@ -46,12 +47,12 @@ char *find_path(char *cmd)
 		return (NULL);
 	}
 	file_path = getenv("PATH");
-	printf("File path: %s\n", file_path);
+	filepath_cpy = strdup(file_path); /*use custom strdup*/
 	if (file_path == NULL)
 	{
 		return (NULL);
 	}
-	path_token = strtok(file_path, delim);
+	path_token = strtok(filepath_cpy, delim);
 	while (path_token != NULL)
 	{
 		path = malloc(_strlen(path_token) + _strlen(cmd) + 2);
@@ -69,6 +70,7 @@ char *find_path(char *cmd)
 		free(path);
 		path_token = strtok(NULL, delim);
 	}
+	free(filepath_cpy);
 	return (NULL);
 }
 /**
