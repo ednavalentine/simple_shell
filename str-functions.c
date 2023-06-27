@@ -28,6 +28,10 @@ char *_strcpy(char *dest, char *src)
 	int i = 0;
 	int j;
 
+	if (src == NULL)
+	{
+		return (dest);
+	}
 	while (*(src + i) != '\0')
 	{
 		i++;
@@ -47,6 +51,10 @@ char *_strcpy(char *dest, char *src)
  */
 int _strcmp(char *s1, char *s2)
 {
+	if (s1 == NULL || s2 == NULL)
+	{
+		return (-1);
+	}
 	while (*s1 && (*s1 == *s2))
 	{
 		s1++;
@@ -62,6 +70,10 @@ int _strcmp(char *s1, char *s2)
  */
 char *_strchr(char *s, char c)
 {
+	if (s == NULL)
+	{
+		return (NULL);
+	}
 	while ((*s != c) && (*s != '\0'))
 	{
 		s++;
@@ -81,6 +93,14 @@ char *_strcat(char *dest, char *src)
 	int i = 0;
 	int j = 0;
 
+	if ((src == NULL && dest == NULL) || dest == NULL)
+	{
+		return (NULL);
+	}
+	if (src == NULL)
+	{
+		return (dest);
+	}
 	while (dest[i] != '\0')
 	{
 		i++;

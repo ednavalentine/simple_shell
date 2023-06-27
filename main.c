@@ -6,18 +6,17 @@
  */
 int main(void)
 {
-	char *input_prompt = "$ ";
+	const char *input_prompt = "$ ";
 	char *input = NULL;
 	size_t n = 0;
 	int num_chars;
 	char **toks;
-	/*char *path = NULL;*/
 
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 		{
-			write(STDOUT_FILENO, input_prompt, _strlen(input_prompt));
+			write(STDOUT_FILENO, input_prompt, strnlen(input_prompt, 3));
 		}
 		num_chars = getline(&input, &n, stdin);
 		if (num_chars == -1)
@@ -25,7 +24,7 @@ int main(void)
 			free(input);
 			exit(0);
 		}
-		if (num_chars > 0 && input[num_chars - 1] == '\n') /*returned this since i fixed _strlen*/
+		if (num_chars > 0 && input[num_chars - 1] == '\n')
 		{
 			input[num_chars - 1] = '\0';
 		}
@@ -34,9 +33,7 @@ int main(void)
 		{
 			exec_input(toks);
 		}
-		/*free(path); so this does not cause issues na gcc and valgrind when its not present in the code*/
 		free_toks(toks);
-		/*n = 0;*/
 	}
 	free(input);
 	return (0);

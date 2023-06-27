@@ -6,15 +6,16 @@
  */
 char **parse_data(char *str)
 {
-	const char *delim = " \n\t\r"; /*added this*/
-	char *str_token = NULL;
-	char **toks = NULL;
+	const char *delim = " \n\t\r";
+	char *str_token;
+	char **toks;
 	size_t count = 0;
 	size_t len = 0;
 
-	toks = malloc(sizeof(char *) * (count + 5)); /* accounted for the extras above */
+	toks = malloc(sizeof(char *) * (count + 5));
 	if (toks == NULL)
 	{
+		free_toks(toks); /*added this here, did not have an effect*/
 		return (NULL);
 	}
 	str_token = strtok(str, delim);
@@ -22,7 +23,7 @@ char **parse_data(char *str)
 	while (str_token != NULL)
 	{
 		toks[count] = malloc(len + 1);
-		if (toks[count] == NULL)
+		if (toks[count] == NULL) /*changed this from toks[count], did not change*/
 		{
 			free_toks(toks);
 			return (NULL);
