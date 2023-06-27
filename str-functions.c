@@ -8,7 +8,7 @@ int _strlen(char *s)
 {
 	int i = 0;
 
-	if (s != NULL) /* added this and it removed the invalid write */
+	if (s != NULL)
 	{
 		while (*(s + i))
 		{

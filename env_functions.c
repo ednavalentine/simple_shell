@@ -8,16 +8,18 @@ char *get_env(char *name)
 {
 	int cnt = 0;
 	char *env_val;
+	char *env_temp;
 
 	if (name == NULL)
 	{
 		return (NULL);
 	}
-	while (environ[cnt] != NULL)
+	env_temp = environ[cnt];
+	while (env_temp != NULL)
 	{
-		if (_strcmp(environ[cnt], name) == 0)
+		if (_strcmp(env_temp, name) == 0)
 		{
-			env_val = _strchr(environ[cnt], '=');
+			env_val = _strchr(env_temp, '=');
 			if (env_val == NULL)
 			{
 				return (NULL);
@@ -47,7 +49,7 @@ char *find_path(char *cmd)
 		return (NULL);
 	}
 	file_path = getenv("PATH");
-	filepath_cpy = strdup(file_path); /*use custom strdup*/
+	filepath_cpy = _strdup(file_path);
 	if (file_path == NULL)
 	{
 		return (NULL);
@@ -65,6 +67,7 @@ char *find_path(char *cmd)
 		_strcat(path, cmd);
 		if ((access(path, X_OK) == 0) && (stat(path, &buf) == 0))
 		{
+			free(filepath_cpy);
 			return (path);
 		}
 		free(path);
@@ -86,9 +89,7 @@ void exec_input(char **toks)
 	char *error = "Command not found: ";
 
 	if (toks == NULL)
-	{
 		return;
-	}
 	path = find_path(toks[0]);
 	if (path == NULL)
 	{
@@ -119,17 +120,11 @@ void exec_input(char **toks)
 			exit(0);
 		}
 		if (WIFEXITED(status))
-		{
 			WEXITSTATUS(status);
-		}
 		else if (WIFSIGNALED(status))
-		{
 			WTERMSIG(status);
-		}
 		else
-		{
 			perror("fork");
-		}
 	}
 	free(path);
 }

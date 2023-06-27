@@ -21,5 +21,6 @@ void free_toks(char **toks);
 char *get_env(char *name);
 char *find_path(char *cmd);
 void exec_input(char **toks);
+char *_strdup(char *str);
 
 #endif /* MAIN_H */
