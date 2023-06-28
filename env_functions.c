@@ -45,23 +45,25 @@ char *find_path(char *cmd)
 	struct stat buf;
 
 	if (cmd == NULL)
+		return (NULL);
+	if (_strchr(cmd, '/') != NULL || _strchr(cmd, '.') != NULL)
 	{
+		if ((stat(cmd, &buf) == 0) && (access(cmd, X_OK) == 0))
+		{
+			return (_strdup(cmd));
+		}
 		return (NULL);
 	}
 	file_path = getenv("PATH");
 	filepath_cpy = _strdup(file_path);
 	if (file_path == NULL)
-	{
 		return (NULL);
-	}
 	path_token = strtok(filepath_cpy, delim);
 	while (path_token != NULL)
 	{
-		path = malloc(_strlen(path_token) + _strlen(cmd) + 2);
+		path = malloc(_strlen(path_token) + 1 + _strlen(cmd) + 1);
 		if (path == NULL)
-		{
 			return (NULL);
-		}
 		_strcpy(path, path_token);
 		_strcat(path, "/");
 		_strcat(path, cmd);
