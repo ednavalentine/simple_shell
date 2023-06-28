@@ -6,8 +6,10 @@
  */
 void _sigint(int sig_flag)
 {
+	char *input = NULL;
+
 	(void) sig_flag;
 	sig_flag = 1;
 	write(STDOUT_FILENO, "\n", 1);
-	exit(0);
+	free(input);
 }

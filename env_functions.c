@@ -119,12 +119,6 @@ void exec_input(char **toks)
 			perror("wait");
 			exit(0);
 		}
-		if (WIFEXITED(status))
-			WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			WTERMSIG(status);
-		else
-			perror("fork");
 	}
 	free(path);
 }

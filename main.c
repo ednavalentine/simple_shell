@@ -6,18 +6,20 @@
  */
 int main(void)
 {
-	const char *input_prompt = "$ ";
+	char *input_prompt = "$ ";
 	char *input = NULL;
 	size_t n = 0;
 	int num_chars;
 	char **toks;
+	int sig_flag = 0;
 
 	signal(SIGINT, _sigint);
+
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 		{
-			write(STDOUT_FILENO, input_prompt, strnlen(input_prompt, 3));
+			write(STDOUT_FILENO, input_prompt, _strlen(input_prompt));
 		}
 		num_chars = getline(&input, &n, stdin);
 		if (num_chars == -1)
@@ -25,13 +27,12 @@ int main(void)
 			free(input);
 			exit(0);
 		}
-		if (num_chars > 0 && input[num_chars - 1] == '\n')
+		if (input[num_chars - 1] == '\n')
 		{
 			input[num_chars - 1] = '\0';
 		}
 		if (sig_flag)
 		{
-			sig_flag = 1;
 			free(input);
 			break;
 		}
@@ -42,7 +43,6 @@ int main(void)
 		}
 		free_toks(toks);
 	}
-	free(input);
 	free(input);
 	return (0);
 }
