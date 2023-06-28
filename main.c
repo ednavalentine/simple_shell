@@ -12,6 +12,7 @@ int main(void)
 	int num_chars;
 	char **toks;
 
+	signal(SIGINT, _sigint);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -28,6 +29,12 @@ int main(void)
 		{
 			input[num_chars - 1] = '\0';
 		}
+		if (sig_flag)
+		{
+			sig_flag = 1;
+			free(input);
+			break;
+		}
 		toks = parse_data(input);
 		if (toks != NULL)
 		{
@@ -35,6 +42,7 @@ int main(void)
 		}
 		free_toks(toks);
 	}
+	free(input);
 	free(input);
 	return (0);
 }
