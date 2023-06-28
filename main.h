@@ -25,5 +25,6 @@ char *find_path(char *cmd);
 void exec_input(char **toks);
 char *_strdup(char *str);
 void _sigint(int sig_flag);
+void shell_exit(void);
 
 #endif /* MAIN_H */
