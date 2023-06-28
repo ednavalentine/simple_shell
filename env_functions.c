@@ -65,7 +65,7 @@ char *find_path(char *cmd)
 		_strcpy(path, path_token);
 		_strcat(path, "/");
 		_strcat(path, cmd);
-		if ((access(path, X_OK) == 0) && (stat(path, &buf) == 0))
+		if ((stat(path, &buf) == 0) && (access(path, X_OK) == 0))
 		{
 			free(filepath_cpy);
 			return (path);

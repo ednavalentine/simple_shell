@@ -34,7 +34,7 @@ int main(void)
 		if (sig_flag)
 		{
 			free(input);
-			break;
+			exit(0);
 		}
 		toks = parse_data(input);
 		if (toks != NULL)
